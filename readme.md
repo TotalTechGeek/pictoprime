@@ -58,6 +58,9 @@ pictoprime -i examples/headshot.png
 }
 ```
 
+<img alt="A picture of matt parker's face" src="examples/headshot.png" width=256 height=256 />
+<img alt="A picture of matt parker's face but as a prime number." src="examples/output.png" width=256 height=256 />
+
 
 ## To Develop
 
