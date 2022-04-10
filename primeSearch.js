@@ -151,6 +151,21 @@ function* almostSophieGermainMultipliers () {
 
 
 /**
+ * Extracts the prime value from the result returned from OpenSSL.
+ * @param {string} str 
+ */
+function extractResult (str) {
+    // If parenthesis show up, it's because there's hex involved.
+    if (str.includes('(')) {
+        const split = str.split('(')
+        return split[1].split(')')[0]
+    }
+
+    // This will typically work.
+    return str.split(' ')[0]
+}
+
+/**
  * @param {string} val
  * @param {number} simultaneous
  * @returns {Promise<string>} 
@@ -169,7 +184,7 @@ async function findAlmostSophieGermain (val, simultaneous) {
         const primeCheck = await Promise.all(tests.map(test => typeof test === 'bigint' ? test * BigInt(val) + 1n : 0n).map(i => execPromise(`openssl prime ${i.toString()}`)))
         const results = primeCheck.filter(i => i.stdout.includes('is prime')).map(i => i.stdout)
 
-        if (results.length) return results[0].split(' ')[0]
+        if (results.length) return extractResult(results[0])
     }
     return ''
 }
@@ -213,7 +228,7 @@ export async function findPrime (original, sophie = false) {
         
         // If we had any successes, we can stop.
         if(successes.length) {
-            const prime = successes.map(i => i.stdout.split(' ')[0])[0]
+            const prime = successes.map(i => extractResult(i.stdout))[0]
             const result = { 
                 prime,
                 attempts,
