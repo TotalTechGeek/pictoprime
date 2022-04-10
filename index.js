@@ -7,7 +7,7 @@ import { transform } from './image.js'
 import commandExists from 'command-exists'
 
 const program = new Command()
-program.version('1.0.0').name('pictoprime').description('A program to find picture-esque primes. Requires openssl.')
+program.version('1.0.1').name('pictoprime').description('A program to find picture-esque primes. Requires openssl.')
 
 program
     .option('-n, --number <number>', 'The number to be transformed into a prime.')
