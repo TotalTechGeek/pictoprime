@@ -8,7 +8,7 @@ Ensure you have the following dependencies:
 
 - [Node.js](https://nodejs.org/en/download/) (16+ supported, earlier versions will also likely work)
 - [GraphicsMagick](https://github.com/IonicaBizau/image-to-ascii/blob/HEAD/INSTALLATION.md)
-- OpenSSL ([Window](https://wiki.openssl.org/index.php/Binaries)) (Mac / Linux likely already have it)
+- OpenSSL ([Windows](https://wiki.openssl.org/index.php/Binaries)) (Mac / Linux likely already have it)
 
 GraphicsMagick Common Installations: 
 ```
