@@ -1,0 +1,27 @@
+{
+  "name": "pictoprime",
+  "version": "1.0.0",
+  "description": "A program to find picture-esque primes. Requires openssl.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jesse Daniel Mitchell",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "command-exists": "^1.2.9",
+    "commander": "^9.1.0",
+    "image-to-ascii": "^3.0.13",
+    "jimp": "^0.16.1",
+    "ramda": "^0.28.0",
+    "tempy": "^2.0.0"
+  },
+  "module": "es2017",
+  "devDependencies": {
+    "@types/node": "^17.0.23"
+  },
+  "bin": {
+    "pictoprime": "./index.js"
+  }
+}
