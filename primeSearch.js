@@ -5,7 +5,11 @@ import { exec } from 'child_process'
 import { cpus } from 'os';
 import { createHash } from 'crypto';
 
+import { generatePrimes } from './generatePrimes.js'
+
 const execPromise = promisify(exec);
+
+const SMALL_PRIMES = generatePrimes(2000).map(p => BigInt(p))
 
 // Todo: Make this configurable.
 /**
@@ -107,8 +111,10 @@ function generateTest (tested, keyFrame) {
 function generateTests (tested, keyFrame, count) {
     let arr = []
     for (let i = 0; i < count; i++) {
-        arr.push(generateTest(tested, keyFrame))
-        tested.add(hash(arr[i]))
+        do {
+            arr[i] = generateTest(tested, keyFrame)
+            tested.add(hash(arr[i]))
+        } while (!isPossiblyPrime(arr[i]))
     }
     return arr
 }
@@ -255,3 +261,18 @@ export async function findPrime (original, sophie = false) {
     }
     
 }
+
+function isPossiblyPrime(value) {
+    const integerValue = BigInt(value)
+    return isNotDivisibleBySmallPrimes(integerValue)
+}
+
+function isNotDivisibleBySmallPrimes(value) {
+    for (const v of SMALL_PRIMES) {
+        if (value % v === 0n) {
+            return false
+        }
+    }
+    return true
+}
+
