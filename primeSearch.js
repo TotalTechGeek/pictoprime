@@ -111,8 +111,10 @@ function generateTest (tested, keyFrame) {
 function generateTests (tested, keyFrame, count) {
     let arr = []
     for (let i = 0; i < count; i++) {
-        arr.push(generateTest(tested, keyFrame))
-        tested.add(hash(arr[i]))
+        do {
+            arr[i] = generateTest(tested, keyFrame)
+            tested.add(hash(arr[i]))
+        } while (!isPossiblyPrime(arr[i]))
     }
     return arr
 }
@@ -225,11 +227,7 @@ export async function findPrime (original, sophie = false) {
         const tests = generateTests(tested, keyFrame, simultaneous)
 
         // Turn the tests into `openssl prime` processes, and wait for them to complete.
-        const result = await Promise.all(
-            tests
-                .filter(i => isPossiblyPrime(i))
-                .map(i => execPromise(`openssl prime ${i}`))
-        )
+        const result = await Promise.all(tests.map(i => execPromise(`openssl prime ${i}`)))
 
         // Filter out any of the results that are not prime.
         const successes = result.filter(i => !i.stdout.includes('not prime'))
