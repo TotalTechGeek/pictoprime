@@ -72,3 +72,9 @@ then
 ```
 node index.js 
 ```
+
+## Special Thanks To
+
+- Numberphile, JF Mckee for [their video on the Trinity Hall Prime](https://www.youtube.com/watch?v=fQQ8IiTWHhg), inspiring earlier versions of this project.
+- Matt Parker, for being a brilliant maths educator & inspiring amateur mathematicians to give things a try. :) 
+- [Forbes Lindesay](https://github.com/ForbesLindesay), for their optimization contributions. 
