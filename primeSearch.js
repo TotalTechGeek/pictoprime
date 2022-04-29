@@ -5,7 +5,11 @@ import { exec } from 'child_process'
 import { cpus } from 'os';
 import { createHash } from 'crypto';
 
+import { generatePrimes } from './generatePrimes.js'
+
 const execPromise = promisify(exec);
+
+const SMALL_PRIMES = generatePrimes(2000).map(p => BigInt(p))
 
 // Todo: Make this configurable.
 /**
@@ -221,7 +225,11 @@ export async function findPrime (original, sophie = false) {
         const tests = generateTests(tested, keyFrame, simultaneous)
 
         // Turn the tests into `openssl prime` processes, and wait for them to complete.
-        const result = await Promise.all(tests.map(i => execPromise(`openssl prime ${i}`)))
+        const result = await Promise.all(
+            tests
+                .filter(i => isPossiblyPrime(i))
+                .map(i => execPromise(`openssl prime ${i}`))
+        )
 
         // Filter out any of the results that are not prime.
         const successes = result.filter(i => !i.stdout.includes('not prime'))
@@ -255,3 +263,18 @@ export async function findPrime (original, sophie = false) {
     }
     
 }
+
+function isPossiblyPrime(value) {
+    const integerValue = BigInt(value)
+    return isNotDivisibleBySmallPrimes(integerValue)
+}
+
+function isNotDivisibleBySmallPrimes(value) {
+    for (const v of SMALL_PRIMES) {
+        if (value % v === 0n) {
+            return false
+        }
+    }
+    return true
+}
+
