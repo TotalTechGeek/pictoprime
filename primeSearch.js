@@ -5,6 +5,8 @@ import { exec } from 'child_process'
 import { cpus } from 'os';
 import { createHash } from 'crypto';
 
+import log from 'loglevel'
+
 import { generatePrimes } from './generatePrimes.js'
 
 const execPromise = promisify(exec);
@@ -18,10 +20,13 @@ const SMALL_PRIMES = generatePrimes(2000).map(p => BigInt(p))
  * @type {{ [key: string]: string[] }}
  */
 const allowed = {
-    '0': ['8', '9'],
+    '0': ['8', '9', '5'],
     '1': ['7'],
+    '2': ['6'],
     '7': ['1'],
+    '5': ['0'],
     '8': ['0', '9'],
+    '6': ['2'],
     '9': ['4'],
     '4': ['9']
 }
@@ -73,12 +78,12 @@ function randomInArray(arr) {
  * Replaces one of the characters in the keyframe with a random character.
  * @param {string} keyFrame 
  */
-function replaceRandomCharacter(keyFrame) {
+function replaceRandomCharacter(keyFrame, specified = null) {
     // do not replace the last character
     const index = findIndexAllowed(keyFrame)
 
     // replace that position in the string
-    const replaceWith = randomInArray(allowed[keyFrame[index]])
+    const replaceWith = randomInArray(specified || allowed[keyFrame[index]])
     keyFrame = keyFrame.substring(0, index) + replaceWith + keyFrame.substring(index + 1)
 
     return keyFrame
@@ -110,12 +115,15 @@ function generateTest (tested, keyFrame) {
  */
 function generateTests (tested, keyFrame, count) {
     let arr = []
-    for (let i = 0; i < count; i++) {
+    const giveUp = escapeAfter(256)
+    tests: for (let i = 0; i < count; i++) {
         do {
             arr[i] = generateTest(tested, keyFrame)
             tested.add(hash(arr[i]))
+            if (giveUp()) break tests
         } while (!isPossiblyPrime(arr[i]))
     }
+    if (arr.length === 1) return arr.filter(i => isPossiblyPrime(i)) // will clean up all this code later...
     return arr
 }
 
@@ -126,12 +134,21 @@ function generateTests (tested, keyFrame, count) {
  */
 function passes (num) {
     let next = num 
-
     return val => {
         const result = val > next
-        if (result) next += num
+        if (result) next = num + Math.floor(val / num) * num
         return result        
     }
+}
+
+/**
+ * Keeps track of how many times it has been invoked to trigger an escape, this is for generateTests,
+ * which is implemented naively.
+ * @param {number} num
+ */
+function escapeAfter (num) {
+    let count = 0
+    return () => count++ > num
 }
 
 /**
@@ -210,6 +227,7 @@ export async function findPrime (original, sophie = false) {
 
     let keyFrame = original
     let attempts = 0
+    let failedViable = 0
 
     const simultaneous = cpus().length
 
@@ -217,12 +235,13 @@ export async function findPrime (original, sophie = false) {
     const rekeyAt = Math.floor(keyFrame.length / 3)
 
     const rekeyCheck = passes(rekeyAt)
-    const restartCheck = passes(rekeyAt * 6)
+    const restartCheck = passes(rekeyAt * 8)
+    const degenerateCheck = passes(160)
 
-    console.log(`Starting process, rekey at ${rekeyAt} attempts, with ${simultaneous} checks each attempt.`)
+    log.debug(`Starting process, rekey at ${rekeyAt} attempts, with ${simultaneous} checks each attempt.`)
 
     while (true) {
-        console.log(attempts)
+        log.debug(attempts)
 
         const tests = generateTests(tested, keyFrame, simultaneous)
 
@@ -253,11 +272,13 @@ export async function findPrime (original, sophie = false) {
         }
     
         attempts++
+        if (!tests.length) failedViable++
 
         // If we reach the rekey point (every "rekeyAt" attempts), we adjust a single digit in the keyframe, and use that as the new keyframe.
         // This is used to try to prevent degradation of quality of the visual.
-        if (rekeyCheck(tested.size)) keyFrame = generateTest(tested, keyFrame)
+        if (!tests.length || rekeyCheck(tested.size)) keyFrame = generateTest(tested, keyFrame)
         if (restartCheck(tested.size)) keyFrame = generateTest(tested, original)
+        if (degenerateCheck(failedViable)) keyFrame = original = replaceRandomCharacter(original, ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
     }
     
 }

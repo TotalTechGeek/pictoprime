@@ -1,6 +1,6 @@
 {
   "name": "pictoprime",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A program to find picture-esque primes. Requires openssl.",
   "main": "index.js",
   "scripts": {
@@ -10,10 +10,12 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
+    "chalk": "^5.0.1",
     "command-exists": "^1.2.9",
     "commander": "^9.1.0",
     "image-to-ascii": "^3.0.13",
     "jimp": "^0.16.1",
+    "loglevel": "^1.8.0",
     "ramda": "^0.28.0",
     "tempy": "^2.0.0"
   },
