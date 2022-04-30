@@ -40,8 +40,11 @@ Options:
   -V, --version          output the version number
   -n, --number <number>  The number to be transformed into a prime.
   -i, --image <image>    Use an image to find primes.
+  -q, --quiet            Hides some of the debug information to make it easier to get output from this program.
+  -x, --export <mode>    The output format (choices: "json", "prime", default: "json")
   --pixels <pixels>      The numbers to use to generate the prime (image mode). Left side is lighter, right side is darker. (default: "7772299408")
   --width <width>        The width of the ascii to generate (image mode). (default: "32")
+  --contrast <contrast>  Additional contrast to apply between -1.0 and 1.0 (image mode). (default: "0.1")
   -s, --sophie           Enable the search for an (almost) Sophie Germain prime (useful for Discrete Log cryptography).
   -h, --help             display help for command
   ```
