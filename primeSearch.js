@@ -232,10 +232,10 @@ export async function findPrime (original, sophie = false) {
     const simultaneous = cpus().length
 
     const tested = new Set()
-    const rekeyAt = Math.floor(keyFrame.length / 3)
+    const rekeyAt = Math.floor(keyFrame.length / 1) 
 
     const rekeyCheck = passes(rekeyAt)
-    const restartCheck = passes(rekeyAt * 8)
+    const restartCheck = passes(rekeyAt * 4)
     const degenerateCheck = passes(160)
 
     log.debug(`Starting process, rekey at ${rekeyAt} attempts, with ${simultaneous} checks each attempt.`)
