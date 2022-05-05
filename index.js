@@ -4,6 +4,7 @@
 import { Command, Option } from 'commander'
 import { findPrime } from './primeSearch.js'
 import { transform } from './image.js'
+import { splitEvery } from "ramda";
 import commandExists from 'command-exists'
 
 import log from 'loglevel'
@@ -50,7 +51,7 @@ async function main () {
     else if (options.export === 'prime')
         log.info(result.prime)
     else
-        result.prime.match(new RegExp(`.{1,${options.width * 2}}`,'g')).forEach((line) => console.log(line))
+        console.log(splitEvery(options.width * 2, result.prime).join('\n'))
 }
 
 main().catch(err => {
