@@ -1,8 +1,8 @@
-# Pictoprime 
+# Pictoprime
 
 This is a program used to generate prime numbers from pictures.
 
-## Dependencies 
+## Dependencies
 
 Ensure you have the following dependencies:
 
@@ -10,7 +10,8 @@ Ensure you have the following dependencies:
 - [GraphicsMagick](https://github.com/IonicaBizau/image-to-ascii/blob/HEAD/INSTALLATION.md)
 - OpenSSL ([Windows](https://wiki.openssl.org/index.php/Binaries)) (Mac / Linux likely already have it)
 
-GraphicsMagick Common Installations: 
+GraphicsMagick Common Installations:
+
 ```
 # OS X
 brew install graphicsmagick
@@ -20,16 +21,15 @@ choco install graphicsmagick
 ```
 
 ## To Install
-You can install this program just by running: 
+
+You can install this program just by running:
+
 ```
-npm i -g pictoprime 
+npm i -g pictoprime
 ```
-
-
-
-
 
 ## To Run
+
 ```
 $ pictoprime --help
 Usage: pictoprime [options]
@@ -47,9 +47,9 @@ Options:
   --contrast <contrast>  Additional contrast to apply between -1.0 and 1.0 (image mode). (default: "0.1")
   -s, --sophie           Enable the search for an (almost) Sophie Germain prime (useful for Discrete Log cryptography).
   -h, --help             display help for command
-  ```
+```
 
-### Example 
+### Example
 
 ```
 pictoprime -i examples/headshot.png
@@ -64,20 +64,22 @@ pictoprime -i examples/headshot.png
 <img alt="A picture of matt parker's face" src="examples/headshot.png" width=256 height=256 />
 <img alt="A picture of matt parker's face but as a prime number." src="examples/output.png" width=256 height=256 />
 
-
 ## To Develop
 
 Clone the repository and run:
+
 ```
 yarn
 ```
-then 
+
+then
+
 ```
-node index.js 
+node index.js
 ```
 
 ## Special Thanks To
 
 - Numberphile, JF Mckee for [their video on the Trinity Hall Prime](https://www.youtube.com/watch?v=fQQ8IiTWHhg), inspiring earlier versions of this project.
-- Matt Parker, for being a brilliant maths educator & inspiring amateur mathematicians to give things a try. :) 
-- [Forbes Lindesay](https://github.com/ForbesLindesay), for their optimization contributions. 
+- Matt Parker, for being a brilliant maths educator & inspiring amateur mathematicians to give things a try. :)
+- [Forbes Lindesay](https://github.com/ForbesLindesay), for their optimization contributions.
