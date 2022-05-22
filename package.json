@@ -4,7 +4,9 @@
   "description": "A program to find picture-esque primes. Requires openssl.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "lint": "prettier --check .",
+    "format": "prettier --write ."
   },
   "author": "Jesse Daniel Mitchell",
   "license": "MIT",
@@ -21,7 +23,8 @@
   },
   "module": "es2017",
   "devDependencies": {
-    "@types/node": "^17.0.23"
+    "@types/node": "^17.0.23",
+    "prettier": "^2.6.2"
   },
   "bin": {
     "pictoprime": "./index.js"
