@@ -13,10 +13,11 @@ const execPromise = promisify(exec);
 
 const SMALL_PRIMES = generatePrimes(2000).map((p) => BigInt(p));
 
-// Todo: Make this configurable.
 /**
  * The ways that we allow the algorithm to substitute a character.
  * Like 0 can become 8 or 9, so on and so forth.
+ * 
+ * TODO: Make this configurable.
  * @type {Record<number, Array<string>>}
  */
 const allowed = {
@@ -308,6 +309,7 @@ export async function findPrime(original, sophie = false) {
 }
 
 /**
+ * TODO: docs
  * @param {string | number | bigint | boolean} value
  */
 function isPossiblyPrime(value) {
@@ -316,6 +318,7 @@ function isPossiblyPrime(value) {
 }
 
 /**
+ * TODO: docs
  * @param {bigint} value
  */
 function isNotDivisibleBySmallPrimes(value) {
