@@ -1,6 +1,6 @@
 {
   "name": "pictoprime",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A program to find picture-esque primes. Requires openssl.",
   "main": "index.js",
   "scripts": {

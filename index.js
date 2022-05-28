@@ -10,7 +10,7 @@ import commandExists from 'command-exists'
 import log from 'loglevel'
 
 const program = new Command()
-program.version('1.0.4').name('pictoprime').description('A program to find picture-esque primes. Requires openssl.')
+program.version('1.0.6').name('pictoprime').description('A program to find picture-esque primes. Requires openssl.')
 
 const outputOption = new Option('-x, --export <mode>', 'The output format').choices(['json', 'prime', 'ascii']).default('json')
 
@@ -46,12 +46,9 @@ async function main () {
 
     const result = await findPrime(options.number, options.sophie)
 
-    if (options.export === 'json')
-        log.info(JSON.stringify(result,undefined,2))
-    else if (options.export === 'prime')
-        log.info(result.prime)
-    else
-        console.log(splitEvery(options.width * 2, result.prime).join('\n'))
+    if (options.export === 'json') log.info(JSON.stringify(result, undefined, 2))
+    else if (options.export === 'prime') log.info(result.prime)
+    else console.log(splitEvery(+options.width * 2, result.prime).join('\n'))
 }
 
 main().catch(err => {

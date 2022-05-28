@@ -1,15 +1,9 @@
 // @ts-check
-
-import { promisify } from 'util'
-import { exec } from 'child_process'
 import { cpus } from 'os';
 import { createHash } from 'crypto';
-
 import log from 'loglevel'
-
 import { generatePrimes } from './generatePrimes.js'
-
-const execPromise = promisify(exec);
+import { spawnPromise } from './utils.js'
 
 const SMALL_PRIMES = generatePrimes(2000).map(p => BigInt(p))
 
@@ -204,9 +198,8 @@ async function findAlmostSophieGermain (val, simultaneous) {
             else tests.push(next.value)
         }
 
-        const primeCheck = await Promise.all(tests.map(test => typeof test === 'bigint' ? test * BigInt(val) + 1n : 0n).map(i => execPromise(`openssl prime ${i.toString()}`)))
-        const results = primeCheck.filter(i => i.stdout.includes('is prime')).map(i => i.stdout)
-
+        const primeCheck = await Promise.all(tests.map(test => typeof test === 'bigint' ? test * BigInt(val) + 1n : 0n).map(i => spawnPromise('openssl', ['prime', i.toString()])))
+        const results = primeCheck.filter(i => i.includes('is prime'))
         if (results.length) return extractResult(results[0])
     }
     return ''
@@ -246,14 +239,14 @@ export async function findPrime (original, sophie = false) {
         const tests = generateTests(tested, keyFrame, simultaneous)
 
         // Turn the tests into `openssl prime` processes, and wait for them to complete.
-        const result = await Promise.all(tests.map(i => execPromise(`openssl prime ${i}`)))
+        const result = await Promise.all(tests.map(i => spawnPromise('openssl', ['prime', i.toString()])))
 
         // Filter out any of the results that are not prime.
-        const successes = result.filter(i => !i.stdout.includes('not prime'))
+        const successes = result.filter(i => !i.includes('not prime'))
         
         // If we had any successes, we can stop.
         if(successes.length) {
-            const prime = successes.map(i => extractResult(i.stdout))[0]
+            const prime = successes.map(extractResult)[0]
             const result = { 
                 prime,
                 attempts,
